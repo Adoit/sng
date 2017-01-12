@@ -50,23 +50,23 @@ public class SngService {
         return getCounter(sequenceName).incrementAndGetBy(inc);
     }
 
-    synchronized public void start() {
+    public synchronized void start() {
         Preconditions.checkNotNull(configuration, "configuration can't be null");
         this.counterFactory = CounterFactories.createFactory(
                 configuration.getStorageType(), configuration.getConfiguration());
     }
 
-    synchronized public void stop() {
+    public synchronized void stop() {
         for (Counter counter : counterMap.values()) {
             counter.stop();
         }
     }
 
-    public SngServiceConfiguration getConfiguration() {
+    public synchronized SngServiceConfiguration getConfiguration() {
         return configuration;
     }
 
-    public void setConfiguration(SngServiceConfiguration configuration) {
+    public synchronized void setConfiguration(SngServiceConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -76,7 +76,7 @@ public class SngService {
 
     private Counter getCounter(String sequenceName) {
         Preconditions.checkNotNull(counterFactory, "counter factory can't be null, you may not start service.");
-        
+
         String counterName = this.getFullSequenceName(sequenceName);
         Counter counter = counterMap.get(counterName);
         if (counter == null) {
