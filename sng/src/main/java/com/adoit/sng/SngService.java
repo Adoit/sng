@@ -25,18 +25,19 @@ public class SngService {
     private static Map<String, Counter> counterMap = new ConcurrentHashMap<String, Counter>();
 
     private String sequencePrefix;
-    private SngServiceConfiguration configuration;
+    private SngServiceSetting serviceSetting;
     private CounterFactory counterFactory;
 
-    private SngService(String sequencePrefix) {
-        this.sequencePrefix = sequencePrefix;
+    private SngService(SngServiceSetting serviceSetting) {
+        this.sequencePrefix = serviceSetting.getSequenceName();
+        this.serviceSetting = serviceSetting;
     }
 
-    public static SngService getInstance(String sequencePrefix) {
-        SngService service = instanceMap.get(sequencePrefix);
+    public static SngService getInstance(SngServiceSetting serviceSetting) {
+        SngService service = instanceMap.get(serviceSetting.getSequenceName());
         if (service == null) {
-            service = new SngService(sequencePrefix);
-            instanceMap.put(sequencePrefix, service);
+            service = new SngService(serviceSetting);
+            instanceMap.put(serviceSetting.getSequenceName(), service);
         }
 
         return service;
@@ -51,9 +52,9 @@ public class SngService {
     }
 
     public synchronized void start() {
-        Preconditions.checkNotNull(configuration, "configuration can't be null");
+        Preconditions.checkNotNull(serviceSetting, "serviceSetting can't be null");
         this.counterFactory = CounterFactories.createFactory(
-                configuration.getStorageType(), configuration.getConfiguration());
+                serviceSetting.getStorageType(), serviceSetting.getConfiguration());
     }
 
     public synchronized void stop() {
@@ -62,12 +63,8 @@ public class SngService {
         }
     }
 
-    public synchronized SngServiceConfiguration getConfiguration() {
-        return configuration;
-    }
-
-    public synchronized void setConfiguration(SngServiceConfiguration configuration) {
-        this.configuration = configuration;
+    public SngServiceSetting getServiceSetting() {
+        return serviceSetting;
     }
 
     private String getFullSequenceName(String sequenceName) {

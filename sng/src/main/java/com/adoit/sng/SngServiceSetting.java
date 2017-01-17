@@ -10,11 +10,17 @@
 
 package com.adoit.sng;
 
-public class SngServiceConfiguration {
+public class SngServiceSetting {
+    private String sequenceName;
     private StorageType storageType;
     private Configuration configuration;
 
-    public SngServiceConfiguration(StorageType storageType, Configuration configuration) {
+    public SngServiceSetting(String sequenceName, StorageType storageType) {
+        this(sequenceName, storageType, null);
+    }
+
+    public SngServiceSetting(String sequenceName, StorageType storageType, Configuration configuration) {
+        this.sequenceName = sequenceName;
         this.storageType = storageType;
         this.configuration = configuration;
     }
@@ -25,5 +31,9 @@ public class SngServiceConfiguration {
 
     public Configuration getConfiguration() {
         return configuration;
+    }
+
+    public String getSequenceName() {
+        return sequenceName;
     }
 }

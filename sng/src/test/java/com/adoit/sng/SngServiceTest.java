@@ -23,7 +23,7 @@ public class SngServiceTest {
     public void testHappyPath() throws Exception {
         SngService sngService = SngService.getInstance(nodePath);
         Configuration zkConfiguration = new ZkConfiguration.Builder().build();
-        SngServiceConfiguration sngConfiguration = new SngServiceConfiguration(StorageType.ZOOKEEPER, zkConfiguration);
+        SngServiceSetting sngConfiguration = new SngServiceSetting(StorageType.ZOOKEEPER, zkConfiguration);
         sngService.setConfiguration(sngConfiguration);
         sngService.start();
 
