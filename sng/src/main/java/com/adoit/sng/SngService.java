@@ -24,12 +24,10 @@ public class SngService {
     private static Map<String, SngService> instanceMap = new ConcurrentHashMap<String, SngService>();
     private static Map<String, Counter> counterMap = new ConcurrentHashMap<String, Counter>();
 
-    private String sequencePrefix;
     private SngServiceSetting serviceSetting;
     private CounterFactory counterFactory;
 
     private SngService(SngServiceSetting serviceSetting) {
-        this.sequencePrefix = serviceSetting.getSequenceName();
         this.serviceSetting = serviceSetting;
     }
 
@@ -51,13 +49,13 @@ public class SngService {
         return getCounter(sequenceName).incrementAndGetBy(inc);
     }
 
-    public synchronized void start() {
+    public void start() {
         Preconditions.checkNotNull(serviceSetting, "serviceSetting can't be null");
         this.counterFactory = CounterFactories.createFactory(
                 serviceSetting.getStorageType(), serviceSetting.getConfiguration());
     }
 
-    public synchronized void stop() {
+    public void stop() {
         for (Counter counter : counterMap.values()) {
             counter.stop();
         }
@@ -68,7 +66,7 @@ public class SngService {
     }
 
     private String getFullSequenceName(String sequenceName) {
-        return this.sequencePrefix + '/' + sequenceName;
+        return serviceSetting.getNamespace() + '/' + sequenceName;
     }
 
     private Counter getCounter(String sequenceName) {

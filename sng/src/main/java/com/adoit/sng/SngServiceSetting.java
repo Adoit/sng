@@ -11,18 +11,22 @@
 package com.adoit.sng;
 
 public class SngServiceSetting {
+    private static final String DEFAULT_NAMESPACE = "/services/sng/v1.0.0/sequence";
+
+    private String namespace;
     private String sequenceName;
     private StorageType storageType;
     private Configuration configuration;
 
-    public SngServiceSetting(String sequenceName, StorageType storageType) {
-        this(sequenceName, storageType, null);
+    private SngServiceSetting(Builder builder) {
+        this.namespace = builder.namespace;
+        this.sequenceName = builder.sequenceName;
+        this.storageType = builder.storageType;
+        this.configuration = builder.configuration;
     }
 
-    public SngServiceSetting(String sequenceName, StorageType storageType, Configuration configuration) {
-        this.sequenceName = sequenceName;
-        this.storageType = storageType;
-        this.configuration = configuration;
+    public static Builder createBuilder() {
+        return new Builder();
     }
 
     public StorageType getStorageType() {
@@ -35,5 +39,43 @@ public class SngServiceSetting {
 
     public String getSequenceName() {
         return sequenceName;
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public static class Builder {
+        private String namespace;
+        private String sequenceName;
+        private StorageType storageType;
+        private Configuration configuration;
+
+        private Builder() {
+        }
+
+        public Builder withNamespace(String namespace) {
+            this.namespace = namespace;
+            return this;
+        }
+
+        public Builder withSequenceName(String sequenceName) {
+            this.sequenceName = sequenceName;
+            return this;
+        }
+
+        public Builder withStorageType(StorageType storageType) {
+            this.storageType = storageType;
+            return this;
+        }
+
+        public Builder withConfiguration(Configuration configuration) {
+            this.configuration = configuration;
+            return this;
+        }
+
+        public SngServiceSetting build() {
+            return new SngServiceSetting(this);
+        }
     }
 }
