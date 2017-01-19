@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 public class ZkCounterTest extends ZkTestCaseBase {
-    private static final String nodePath = "/baiwang/bwcloud/services/sng/v1.0.0/sequence";
+    private static final String nodePath = "/services/sng/v1.0.0/sequence";
 
     @Test
     public void testBadPath() throws Exception {
